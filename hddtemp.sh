@@ -1,9 +1,9 @@
 #!/bin/bash
 
 DEV=/dev/sda
-HOST=nidoking
+HOST=nidoqueen
 
 #timestamp=$(date +%s)000000000
 
-temp=$(sudo hddtemp -n -w $1)
-echo "my_hddtemp,host=${2} temperature=${temp}"
+temp=$(sudo hddtemp -n -w $DEV)
+echo "my_hddtemp,host=${HOST} temperature=${temp}"
