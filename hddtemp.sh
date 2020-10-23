@@ -1,7 +1,7 @@
 #!/bin/bash
 
-DEV=$1
-HOST=$2
+DEV=/dev/sda
+HOST=nidoking
 
 #timestamp=$(date +%s)000000000
 
