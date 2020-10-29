@@ -42,11 +42,54 @@ sudo update-rc.d telegraf defaults
 
 
 # telegraf.conf
-Edit the provided `telegraf.conf` file by setting up the necessary details (and credentials) to grafana and influxDB. 
-The config file is talky enough, hence I am not covering any more details about it here and now.
-
-Then, copy it to `/etc/telegraf/telegraf.conf`.
+Edit the provided `telegraf_client.conf` and `telegraf_server.conf` file by setting up the necessary details (and credentials) to grafana and influxDB. 
 If you first want to see how many stuffs can be enabled, then check first the default `telegraf.conf` file at `/etc/telegraf/telegraf.conf`
+
+### server
+The files do not containt a heavy amount of comments like the sample files for telegraf but what you have to change for `server` is the following:
+
+```
+dc = "i4" # your datacenter id, if no datacenter, use, for instance, your department code
+rack = "levi-rack" # define a rack ID here. If you monitor everything within a rack, just pick a random name
+...
+hostname = "banana" # this is important! This is how you can identify the monitored data coming from the server itself!
+urls = ["http://127.0.0.1:8086"] # accordingly, set influxDB access properly
+...
+[[inputs.net]]
+    interfaces = ["eth0.101", "eth0.102", "br0", "eth0"] #use your interface you want to monitor
+
+```
+Note, my server monitoring server is a BananaPI, so there is no HDD/SSD to monitor.
+
+
+### client
+Now, let's see the config file for the clients:
+```
+dc = "i4" # your datacenter id, if no datacenter, use, for instance, your department code
+rack = "levi-rack" # define a rack ID here. If you monitor everything within a rack, just pick a random name
+...
+hostname = "server1" # this is important! This is how you can identify the monitored data coming from the server itself!
+urls = ["http://192.168.1.1:8086"] # set the IP of the server
+...
+```
+Update the rest of the telegraf configs according to your specific needs
+
+Then, copy the config file to `/etc/telegraf/` directory.
+### server
+```
+$ sudo cp telegraf_server.conf /etc/telegraf/telegraf.conf
+```
+### client
+```
+$ sudo cp telegraf_client.conf /etc/telegraf/telegraf.conf
+```
+### On both
+Sometimes, `telegraf` wants to read a config file from `/etc/default/telegraf.conf`, so it is safe to create a symlink there pointing to our configuration:
+```
+$ sudo ln -s /etc/telegraf/telegraf.conf /etc/default/telegraf.conf
+```
+
+
 
 # Restart telegraf
 ### with systemd
