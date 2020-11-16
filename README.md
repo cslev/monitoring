@@ -154,9 +154,39 @@ Now, add/uncomment the following lines in `telegraf.conf` assuming your hostname
 ```
  [[inputs.exec]]
     commands = [
-        "sh /home/lele/monitoring/hddtemp.sh /dev/sda nidoking"
+        "sh /home/user/monitoring/hddtemp.sh /dev/sda nidoking"
     ]
     timeout = "5s"
     data_format = "influx"
 
 ```
+
+# WiringPI/DHT22 temperature/humidity sensor
+If you have a DHT22 sensor and you can wire it to your monitoring device, e.g., to the GPIO ports of the Raspberry pi, then you 
+we can use `lol_dht22` [submodule](https://github.com/technion/lol_dht22) in this repo to read those values.
+In order checkout the submodule, issue the following command:
+```
+git submodule update --init --recursive
+```
+
+## Requirements
+This submodule is based on the wiringPI C library, so first we have to install it.
+Doing it on Raspberry PI is straightforward and finding materials and instruction via google is simple.
+In case you want to use it in a BananaPi Pro/R1/etc. (like we do), then please refer to this [site](http://wiki.lemaker.org/BananaPro/Pi:GPIO_library) 
+
+
+Then, configure and compile the library as usual:
+```
+./configure
+make
+sudo make install
+```
+
+If everything works fine, then the following command should do the job
+```
+sudo ./loldht 2
+Raspberry Pi wiringPi DHT22 reader
+www.lolware.net
+Humidity = 44.60 % Temperature = 36.00 *C 
+```
+in case you also wired the data to the second GPIO port
