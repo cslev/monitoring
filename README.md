@@ -189,4 +189,17 @@ Raspberry Pi wiringPi DHT22 reader
 www.lolware.net
 Humidity = 44.60 % Temperature = 36.00 *C 
 ```
-in case you also wired the data to the second GPIO port
+in case you also wired the data to the second GPIO port.
+
+In case your DHT22 module is connected to the monitoring system itself (not the reporting servers), modify the telegraf_server.conf
+by adding the `input.exec` blocks as in case of the HDDtemp above.
+```
+# # Read metrics from one or more commands that can output to stdout
+[[inputs.exec]]
+    commands = [
+        "sh /home/user/monitoring/racktemp.sh"
+]
+
+    timeout = "5s"
+    data_format = "influx"
+```
